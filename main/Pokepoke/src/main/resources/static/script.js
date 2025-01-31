@@ -76,6 +76,7 @@ async function determineWinner(player1Pokemon, player2Pokemon) {
 	var critical = 1;
 	var p1p2 = 1;
 	var p2p1 = 1;
+	var output = "";
 	
 	p1p2 = await calcDamage(player1Pokemon.types[0].type.name,player2Pokemon.types[0].type.name)
 	if(player2Pokemon.types.length>=2){
@@ -90,7 +91,8 @@ async function determineWinner(player1Pokemon, player2Pokemon) {
 	//console.log(p2p1)
 	while(hp1 > 0 && hp2>0){
 		critical = isCritical()
-		
+		output = ""
+		output += player2Pokemon.name +"のこうげき！<br>"
 		if(at2>de1){
 			hp1 -= (5 + ((at2 -de1) * p2p1 * critical)) 
 		}else{
@@ -98,18 +100,23 @@ async function determineWinner(player1Pokemon, player2Pokemon) {
 		}
 		
 		if (critical == 2){
-			resultElement.innerHTML  +=　"きゅうしょにあたった！"
+			output  +=　"きゅうしょにあたった！<br>"
 		}
 		if (p2p1 > 1){
-			resultElement.innerHTML  +=　"こうかはばつぐんだ！"
+			output  +=　"こうかはばつぐんだ！<br>"
 		}else if(p2p1 < 1 && p2p1 > 0){
-			resultElement.innerHTML  +=　"こうかはいまひとつのようだ・・・"
+			output  +=　"こうかはいまひとつのようだ・・・<br>"
 		}else if(p2p1 == 0){
-			resultElement.innerHTML  +=　"こうかはないようだ・・・"
+			output +=　"こうかはないようだ・・・<br>"
 		}
-		resultElement.innerHTML  += "Player1 のこり:" + hp1 + '<br>'
+		output  += player1Pokemon.name + "のたいりょく のこり:" + hp1 + '</font><br>'
+		
+		resultElement.innerHTML  += '<font color="red">' + output
+		output = ""
 		
 		critical = isCritical()
+		
+		output  +=　player1Pokemon.name +"のこうげき！<br>"
 		if(at1>de2){
 			hp2 -= 5 + ((at1-de2) * p1p2 * critical)
 		}else{
@@ -117,25 +124,26 @@ async function determineWinner(player1Pokemon, player2Pokemon) {
 		}
 		
 		if (critical == 2){
-			resultElement.innerHTML  +=　"きゅうしょにあたった！"
+			output +=　"きゅうしょにあたった！<br>"
 		}
 		if (p1p2 > 1){
-			resultElement.innerHTML  +=　"こうかはばつぐんだ！"
+			output +=　"こうかはばつぐんだ！<br>"
 		}else if(p1p2 < 1 && p1p2>0){
-			resultElement.innerHTML  +=　"こうかはいまひとつのようだ・・・"
+			output  +=　"こうかはいまひとつのようだ・・・<br>"
 		}else if(p1p2 == 0){
-			resultElement.innerHTML  +=　"こうかはないようだ・・・"
+			output  +=　"こうかはないようだ・・・<br>"
 		}
-		resultElement.innerHTML  += "Player2 のこり:" + hp2 + '<br>'
+		output  +=  player2Pokemon.name + "のたいりょく のこり:" + hp2 + '</font><br>'
+		resultElement.innerHTML  += '<font color="blue">' + output
 	}
 	
 	
 	
 	if (hp1 > hp2) {
-        resultElement.innerHTML  += 'Player 1のかち!';
+        resultElement.innerHTML  += '<font color="blue">' + player1Pokemon.name + 'のかち!';
 		
     } else if (hp1 < hp2) {
-        resultElement.innerHTML  += 'Player 2のかち!';
+        resultElement.innerHTML  += '<font color="red">' + player2Pokemon.name + 'のかち!';
     } else {
         resultElement.innerHTML  += '引き分けー';
     }
