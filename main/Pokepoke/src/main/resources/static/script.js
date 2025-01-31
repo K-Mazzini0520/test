@@ -48,6 +48,8 @@ async function displayPokemon(pokemon, player) {
 		//document.getElementById(`${player}-type2`).textContent = `タイプ: ${pokemon.types[1].type.name}`;
 		document.getElementById(`${player}-type2`).innerHTML = `タイプ: <img id ="${player}-type2img" src="` + await getIcon(pokemon.types[1].type.name) +'"></img>'
 		//document.getElementById(`${player}-type2img`).src = await getIcon(pokemon.types[1].type.name);
+	}else{
+		document.getElementById(`${player}-type2`).innerHTML =""
 	}
 }
 
@@ -58,7 +60,7 @@ function startBattle() {
     if (player1Pokemon && player2Pokemon) {
         determineWinner(player1Pokemon, player2Pokemon);
     } else {
-        alert('Please summon Pokémon first!');
+        alert('まずはポケモンを呼んでもらいましょうかね');
     }
 }
 
@@ -84,8 +86,8 @@ async function determineWinner(player1Pokemon, player2Pokemon) {
 	if(player1Pokemon.types.length>=2){
 		p2p1 *= await calcDamage(player2Pokemon.types[0].type.name,player1Pokemon.types[1].type.name)
 	}
-	console.log(p1p2)
-	console.log(p2p1)
+	//console.log(p1p2)
+	//console.log(p2p1)
 	while(hp1 > 0 && hp2>0){
 		critical = isCritical()
 		
