@@ -1,0 +1,65 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    text-align: center;
+    color: #333;
+}
+
+.container {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 50px;
+}
+
+.player {
+    border: 2px solid #333;
+    padding: 20px;
+    width: 500px;
+    background-color: #fff;
+}
+
+#battle-button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #ffcc00;
+    border: none;
+    color: #cc0000;
+    cursor: pointer;
+}
+
+#battle-button:hover {
+    background-color: #cc0000;
+    color: #ffcc00;
+}
+
+#summon-button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #cc0000;
+    border: none;
+    color: #ffcc00;
+    cursor: pointer;
+}
+
+#summon-button:hover {
+    background-color: #ffcc00;
+    color: #cc0000;
+}
+
+h2 {
+    color: #cc0000;
+}
+
+img {
+    width: 300px;
+    height: 300px;
+}
+
+.result {
+    margin-top: 20px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #cc0000;
+}
