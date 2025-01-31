@@ -51,10 +51,32 @@ body {
 h2 {
     color: #cc0000;
 }
+img#player2-img {
+    width: 150px;
+    height: 150px;
+}
 
-img {
-    width: 300px;
-    height: 300px;
+img#player1-img {
+	width: 150px;
+	height: 150px;
+}
+
+
+img#player1-type1img {
+    width: 50px;
+    height: 11px;
+}
+img#player1-type2img {
+	width: 50px;
+    height: 11px;
+}
+img#player2-type1img {
+    width: 50px;
+    height: 11px;
+}
+img#player2-type2img {
+    width: 50px;
+    height: 11px;
 }
 
 .result {

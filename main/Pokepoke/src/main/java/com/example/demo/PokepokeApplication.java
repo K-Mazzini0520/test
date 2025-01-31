@@ -4,8 +4,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 
-//import com.example.demo.controller.PokemonGame;
-
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class })
 public class PokepokeApplication {
     public static void main(String[] args) {

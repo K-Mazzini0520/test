@@ -18,7 +18,13 @@ public class PokemonController {
     
     @GetMapping("/damage")
     public Double calcDamage(@RequestParam String from, String to) {
-    	System.out.println(pokemonService.caclDamage(from, to));
+    	//System.out.println(from + "→" + to);
         return pokemonService.caclDamage(from, to);
+    }
+    
+    @GetMapping("/type")
+    public String getIcon(@RequestParam String type) {
+    	//System.out.println(from + "→" + to);
+        return pokemonService.getIcon(type);
     }
 }

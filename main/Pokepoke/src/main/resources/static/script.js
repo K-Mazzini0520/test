@@ -27,16 +27,27 @@ async function calcDamage(t1,t2) {
     return await response.json();
 }
 
-function displayPokemon(pokemon, player) {
+async function getIcon(t1) {	
+    const response = await fetch(`/type?type=${t1}`);
+	//console.log(response.blob);
+    return await response.text();
+}
+
+async function displayPokemon(pokemon, player) {
+	
     document.getElementById(`${player}-img`).src = pokemon.sprites.front_default;
     document.getElementById(`${player}-name`).textContent = `なまえ: ${pokemon.name}`;
     //document.getElementById(`${player}-height`).textContent = `しんちょう: ${pokemon.height}`;
 	document.getElementById(`${player}-hp`).textContent = `たいりょく: ${pokemon.stats[0].base_stat}`;
 	document.getElementById(`${player}-attack`).textContent = `こうげきりょく: ${pokemon.stats[1].base_stat}`;
 	document.getElementById(`${player}-defence`).textContent = `しゅびりょく: ${pokemon.stats[2].base_stat}`;
-    document.getElementById(`${player}-type`).textContent = `タイプ: ${pokemon.types[0].type.name}`
+    //document.getElementById(`${player}-type`).textContent = `タイプ: ${pokemon.types[0].type.name}`
+	document.getElementById(`${player}-type`).innerHTML = `タイプ: <img id ="${player}-type1img" src="` + await getIcon(pokemon.types[0].type.name) +'"></img>'
+	//document.getElementById(`${player}-type1img`).src = await getIcon(pokemon.types[0].type.name);
 	if(pokemon.types.length>=2){
-		document.getElementById(`${player}-type2`).textContent = `タイプ: ${pokemon.types[1].type.name}`;
+		//document.getElementById(`${player}-type2`).textContent = `タイプ: ${pokemon.types[1].type.name}`;
+		document.getElementById(`${player}-type2`).innerHTML = `タイプ: <img id ="${player}-type2img" src="` + await getIcon(pokemon.types[1].type.name) +'"></img>'
+		//document.getElementById(`${player}-type2img`).src = await getIcon(pokemon.types[1].type.name);
 	}
 }
 
@@ -51,7 +62,7 @@ function startBattle() {
     }
 }
 
-function determineWinner(player1Pokemon, player2Pokemon) {
+async function determineWinner(player1Pokemon, player2Pokemon) {
     const resultElement = document.getElementById('result');
 	resultElement.innerHTML = "";
 	var hp1 = player1Pokemon.stats[0].base_stat;
@@ -64,32 +75,55 @@ function determineWinner(player1Pokemon, player2Pokemon) {
 	var p1p2 = 1;
 	var p2p1 = 1;
 	
-	p1p2 = calcDamage(player1Pokemon.types[0].type.name,player2Pokemon.types[0].type.name)
-	p2p1 = calcDamage(player2Pokemon.types[0].type.name,player1Pokemon.types[0].type.name)
+	p1p2 = await calcDamage(player1Pokemon.types[0].type.name,player2Pokemon.types[0].type.name)
+	if(player2Pokemon.types.length>=2){
+		p1p2 *= await calcDamage(player1Pokemon.types[0].type.name,player2Pokemon.types[1].type.name)
+	}
+	
+	p2p1 = await calcDamage(player2Pokemon.types[0].type.name,player1Pokemon.types[0].type.name)
+	if(player1Pokemon.types.length>=2){
+		p2p1 *= await calcDamage(player2Pokemon.types[0].type.name,player1Pokemon.types[1].type.name)
+	}
 	console.log(p1p2)
+	console.log(p2p1)
 	while(hp1 > 0 && hp2>0){
 		critical = isCritical()
 		
 		if(at2>de1){
-			hp1 -= (5 + (at2 * p1p2 * critical - de1)) 
+			hp1 -= (5 + ((at2 -de1) * p2p1 * critical)) 
 		}else{
-			hp1 -= 5 * p1p2 * critical
+			hp1 -= 5 * p2p1 * critical
 		}
+		
 		if (critical == 2){
 			resultElement.innerHTML  +=　"きゅうしょにあたった！"
+		}
+		if (p2p1 > 1){
+			resultElement.innerHTML  +=　"こうかはばつぐんだ！"
+		}else if(p2p1 < 1 && p2p1 > 0){
+			resultElement.innerHTML  +=　"こうかはいまひとつのようだ・・・"
+		}else if(p2p1 == 0){
+			resultElement.innerHTML  +=　"こうかはないようだ・・・"
 		}
 		resultElement.innerHTML  += "Player1 のこり:" + hp1 + '<br>'
 		
 		critical = isCritical()
 		if(at1>de2){
-			hp2 -= 5 + (at1 * p2p1 * critical - de2)
+			hp2 -= 5 + ((at1-de2) * p1p2 * critical)
 		}else{
-			hp2 -= 5 * p2p1 * critical
+			hp2 -= 5 * p1p2 * critical
 		}
 		
 		if (critical == 2){
 			resultElement.innerHTML  +=　"きゅうしょにあたった！"
-		} 
+		}
+		if (p1p2 > 1){
+			resultElement.innerHTML  +=　"こうかはばつぐんだ！"
+		}else if(p1p2 < 1 && p1p2>0){
+			resultElement.innerHTML  +=　"こうかはいまひとつのようだ・・・"
+		}else if(p1p2 == 0){
+			resultElement.innerHTML  +=　"こうかはないようだ・・・"
+		}
 		resultElement.innerHTML  += "Player2 のこり:" + hp2 + '<br>'
 	}
 	
