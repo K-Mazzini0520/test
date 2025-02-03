@@ -15,9 +15,16 @@
             <p id="player1-name"></p>
 			<p id="player1-hp"></p>
 			<p id="player1-attack"></p>
-			<p id="player1-defence"></p>			
+			<p id="player1-defence"></p>
+			<p id="player1-spattack"></p>
+			<p id="player1-spdefence"></p>			
 			<p id="player1-type"></p>
 			<p id="player1-type2"></p>
+			<input type="radio"name="player1-attacking" value="at" id="player1-attacking1" checked="true">
+			<label for="attacking1">こうげき</label>
+			<input type="radio"name="player1-attacking" value="sp" id="player1-attacking2">
+			<label for="attacking2">とくしゅこうげき</label>
+			</br>
         </div>
         <div class="player" id="player2">
             <h2>Player 2</h2>
@@ -26,8 +33,14 @@
             <p id="player2-hp"></p>
 			<p id="player2-attack"></p>
 			<p id="player2-defence"></p>
+			<p id="player2-spattack"></p>
+			<p id="player2-spdefence"></p>
 			<p id="player2-type"></p>
 			<p id="player2-type2"></p>
+			<input type="radio"name="player2-attacking" value="at" id="player2-attacking1" checked="true">
+			<label for="attacking1">こうげき</label>
+			<input type="radio"name="player2-attacking" value="sp" id="player2-attacking2">
+			<label for="attacking2">とくしゅこうげき</label>
         </div>
     </div>
 	<button id="summon-button" onclick=summonMonster()>ポケっス～</button>

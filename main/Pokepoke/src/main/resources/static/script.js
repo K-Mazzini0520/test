@@ -41,6 +41,9 @@ async function displayPokemon(pokemon, player) {
 	document.getElementById(`${player}-hp`).textContent = `たいりょく: ${pokemon.stats[0].base_stat}`;
 	document.getElementById(`${player}-attack`).textContent = `こうげきりょく: ${pokemon.stats[1].base_stat}`;
 	document.getElementById(`${player}-defence`).textContent = `しゅびりょく: ${pokemon.stats[2].base_stat}`;
+	document.getElementById(`${player}-spattack`).textContent = `とくしゅこうげき: ${pokemon.stats[3].base_stat}`;
+	document.getElementById(`${player}-spdefence`).textContent = `とくしゅしゅび: ${pokemon.stats[4].base_stat}`;
+		
     //document.getElementById(`${player}-type`).textContent = `タイプ: ${pokemon.types[0].type.name}`
 	document.getElementById(`${player}-type`).innerHTML = `タイプ: <img id ="${player}-type1img" src="` + await getIcon(pokemon.types[0].type.name) +'"></img>'
 	//document.getElementById(`${player}-type1img`).src = await getIcon(pokemon.types[0].type.name);
@@ -67,16 +70,38 @@ function startBattle() {
 async function determineWinner(player1Pokemon, player2Pokemon) {
     const resultElement = document.getElementById('result');
 	resultElement.innerHTML = "";
+	
+	var op1 = document.getElementsByName("player1-attacking");
+	var atm1 = '';
+
+    op1.forEach(item => {
+        if(item.checked){
+            atm1 = item.value;
+        }
+    });
+	
+	var op2 = document.getElementsByName("player2-attacking");
+		var atm2 = '';
+
+	    op2.forEach(item => {
+	        if(item.checked){
+	            atm2 = item.value;
+	        }
+	    });
+	
+					
 	var hp1 = player1Pokemon.stats[0].base_stat;
 	var hp2 = player2Pokemon.stats[0].base_stat;
-	var at1 = player1Pokemon.stats[1].base_stat;
-	var at2 = player2Pokemon.stats[1].base_stat;
-	var de1 = player1Pokemon.stats[2].base_stat;
-	var de2 = player2Pokemon.stats[2].base_stat;	
+	var at1 = atm1 == "at" ? player1Pokemon.stats[1].base_stat : player1Pokemon.stats[3].base_stat
+	var at2 = atm2 == "at" ? player2Pokemon.stats[1].base_stat : player2Pokemon.stats[3].base_stat
+	var de1 = atm2 == "at" ? player1Pokemon.stats[2].base_stat : player1Pokemon.stats[4].base_stat
+	var de2 = atm1 == "at" ? player2Pokemon.stats[2].base_stat : player2Pokemon.stats[4].base_stat	
 	var critical = 1;
 	var p1p2 = 1;
 	var p2p1 = 1;
 	var output = "";
+	
+	console.log(at1 + ":" + at2)	
 	
 	p1p2 = await calcDamage(player1Pokemon.types[0].type.name,player2Pokemon.types[0].type.name)
 	if(player2Pokemon.types.length>=2){
@@ -87,8 +112,7 @@ async function determineWinner(player1Pokemon, player2Pokemon) {
 	if(player1Pokemon.types.length>=2){
 		p2p1 *= await calcDamage(player2Pokemon.types[0].type.name,player1Pokemon.types[1].type.name)
 	}
-	//console.log(p1p2)
-	//console.log(p2p1)
+
 	while(hp1 > 0 && hp2>0){
 		critical = isCritical()
 		output = ""
@@ -109,7 +133,7 @@ async function determineWinner(player1Pokemon, player2Pokemon) {
 		}else if(p2p1 == 0){
 			output +=　"こうかはないようだ・・・<br>"
 		}
-		output  += player1Pokemon.name + "のたいりょく のこり:" + hp1 + '</font><br>'
+		output  += player1Pokemon.name + "のたいりょく のこり:" + hp1 + '<br>'
 		
 		resultElement.innerHTML  += '<font color="red">' + output
 		output = ""
@@ -133,7 +157,7 @@ async function determineWinner(player1Pokemon, player2Pokemon) {
 		}else if(p1p2 == 0){
 			output  +=　"こうかはないようだ・・・<br>"
 		}
-		output  +=  player2Pokemon.name + "のたいりょく のこり:" + hp2 + '</font><br>'
+		output  +=  player2Pokemon.name + "のたいりょく のこり:" + hp2 + '<br>'
 		resultElement.innerHTML  += '<font color="blue">' + output
 	}
 	
