@@ -1,11 +1,12 @@
 
-function summonMonster() {
+function summonMonster(flg) {
 	const resultElement = document.getElementById('result');
 	resultElement.innerHTML = "";
-    const player1Id = Math.floor(Math.random() * 1020) + 1;
-    const player2Id = Math.floor(Math.random() * 1020) + 1;
-
-    Promise.all([fetchPokemon(player1Id), fetchPokemon(player2Id)])
+    const player1Id = Math.floor(Math.random() * 1024) + 1;
+    const player2Id = flg>=2 ? parseInt(flg) - 1 : Math.floor(Math.random() * 1024) + 1;
+	//console.log(player2Id)
+    if(flg==0){
+	Promise.all([fetchPokemon(player1Id), fetchPokemon(player2Id)])
         .then(([player1Pokemon, player2Pokemon]) => {
             displayPokemon(player1Pokemon, 'player1');
             displayPokemon(player2Pokemon, 'player2');
@@ -13,6 +14,19 @@ function summonMonster() {
             sessionStorage.setItem('player2Pokemon', JSON.stringify(player2Pokemon));
             //determineWinner(player1Pokemon, player2Pokemon);
         });
+	}else if(flg==1){
+		Promise.all([fetchPokemon(player1Id)])
+		        .then(([player1Pokemon]) => {
+		            displayPokemon(player1Pokemon, 'player1');
+					sessionStorage.setItem('player1Pokemon', JSON.stringify(player1Pokemon));
+		        });
+	}else{
+		Promise.all([fetchPokemon(player2Id)])
+				        .then(([player2Pokemon]) => {
+				            displayPokemon(player2Pokemon, 'player2');
+							sessionStorage.setItem('player2Pokemon', JSON.stringify(player2Pokemon));
+				        });
+	}
 }
 
 async function fetchPokemon(id) {	
@@ -101,7 +115,7 @@ async function determineWinner(player1Pokemon, player2Pokemon) {
 	var p2p1 = 1;
 	var output = "";
 	
-	console.log(at1 + ":" + at2)	
+	//console.log(at1 + ":" + at2)	
 	
 	p1p2 = await calcDamage(player1Pokemon.types[0].type.name,player2Pokemon.types[0].type.name)
 	if(player2Pokemon.types.length>=2){
