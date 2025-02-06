@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokemon Battle Game</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+	<h1>ポケモンバトル</h1>
+    <div class="container">
+        <div class="player" id="player1">
+            <h2>Player 1</h2>
+            <img id="player1-img" src="" alt="Player 1 Pokemon">
+            <p id="player1-name"></p>
+			<p id="player1-hp"></p>
+			<p id="player1-attack"></p>
+			<p id="player1-defence"></p>
+			<p id="player1-spattack"></p>
+			<p id="player1-spdefence"></p>			
+			<p id="player1-type"></p>
+			<p id="player1-type2"></p>
+			<input type="radio"name="player1-attacking" value="at" id="player1-attacking1" checked="true">
+			<label for="attacking1">こうげき</label>
+			<input type="radio"name="player1-attacking" value="sp" id="player1-attacking2">
+			<label for="attacking2">とくしゅこうげき</label>
+			</br>
+        </div>
+        <div class="player" id="player2">
+            <h2>Player 2</h2>
+            <img id="player2-img" src="" alt="Player 2 Pokemon">
+            <p id="player2-name"></p>
+            <p id="player2-hp"></p>
+			<p id="player2-attack"></p>
+			<p id="player2-defence"></p>
+			<p id="player2-spattack"></p>
+			<p id="player2-spdefence"></p>
+			<p id="player2-type"></p>
+			<p id="player2-type2"></p>
+			<input type="radio"name="player2-attacking" value="at" id="player2-attacking1" checked="true">
+			<label for="attacking1">こうげき</label>
+			<input type="radio"name="player2-attacking" value="sp" id="player2-attacking2">
+			<label for="attacking2">とくしゅこうげき</label>
+        </div>
+    </div>
+	<button id="summon-button" onclick=summonMonster(0)>ポケっス～</button>
+    <button id="battle-button" onclick=startBattle()>バトル！</button>
+	<div id="result" class="result"></div>
+    <script src="script.js"></script>
+</body>
+</html>

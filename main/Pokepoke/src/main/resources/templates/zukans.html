@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>別ウインドウ</title>
+</head>
+<body>
+    <input type="text" id="inputField" placeholder="値を入力してください">
+    <button onclick="window.close()">きみにきめた！</button>
+	<button onclick="location.href='/zukan'">ひょうじ</button>
+	<table id="zukanTable">
+		<tr>
+		    <th>ID</th>
+		    <th>Name</th>
+		</tr>
+		<tr th:each="item : ${items}">
+		    <td th:text="${item.id}"></td>
+		    <td th:text="${item.name}"></td>
+		</tr>
+</body>
+
+</html>
