@@ -57,7 +57,7 @@ async function displayPokemon(pokemon, player) {
 	document.getElementById(`${player}-defence`).textContent = `しゅびりょく: ${pokemon.stats[2].base_stat}`;
 	document.getElementById(`${player}-spattack`).textContent = `とくしゅこうげき: ${pokemon.stats[3].base_stat}`;
 	document.getElementById(`${player}-spdefence`).textContent = `とくしゅしゅび: ${pokemon.stats[4].base_stat}`;
-		
+	updateGauge(player.replace("player",""),pokemon.stats[0].base_stat,pokemon.stats[0].base_stat)
     //document.getElementById(`${player}-type`).textContent = `タイプ: ${pokemon.types[0].type.name}`
 	document.getElementById(`${player}-type`).innerHTML = `タイプ: <img id ="${player}-type1img" src="` + await getIcon(pokemon.types[0].type.name) +'"></img>'
 	//document.getElementById(`${player}-type1img`).src = await getIcon(pokemon.types[0].type.name);
@@ -75,7 +75,8 @@ function startBattle() {
     const player2Pokemon = JSON.parse(sessionStorage.getItem('player2Pokemon'));
 
     if (player1Pokemon && player2Pokemon) {
-        determineWinner(player1Pokemon, player2Pokemon);
+        //determineWinner(player1Pokemon, player2Pokemon);
+		battle1turn(player1Pokemon, player2Pokemon);
     } else {
         alert('まずはポケモンを呼んでもらいましょうかね');
     }
@@ -147,6 +148,9 @@ async function determineWinner(player1Pokemon, player2Pokemon) {
 		}else if(p2p1 == 0){
 			output +=　"こうかはないようだ・・・<br>"
 		}
+		if(hp1 < 0){
+			hp1 = 0;
+		}
 		output  += player1Pokemon.name + "のたいりょく のこり:" + hp1 + '<br>'
 		
 		resultElement.innerHTML  += '<font color="red">' + output
@@ -171,6 +175,9 @@ async function determineWinner(player1Pokemon, player2Pokemon) {
 		}else if(p1p2 == 0){
 			output  +=　"こうかはないようだ・・・<br>"
 		}
+		if(hp2<0){
+			hp2 = 0;
+		}
 		output  +=  player2Pokemon.name + "のたいりょく のこり:" + hp2 + '<br>'
 		resultElement.innerHTML  += '<font color="blue">' + output
 	}
@@ -187,6 +194,141 @@ async function determineWinner(player1Pokemon, player2Pokemon) {
     }
 }
 
+async function battle1turn(player1Pokemon, player2Pokemon) {
+    const resultElement = document.getElementById('result');
+	resultElement.innerHTML = "";
+	
+	var op1 = document.getElementsByName("player1-attacking");
+	var atm1 = '';
+
+    op1.forEach(item => {
+        if(item.checked){
+            atm1 = item.value;
+        }
+    });
+	
+	var op2 = document.getElementsByName("player2-attacking");
+		var atm2 = '';
+
+	    op2.forEach(item => {
+	        if(item.checked){
+	            atm2 = item.value;
+	        }
+	    });
+	
+					
+	var hp1 = document.getElementById("player1-hp").textContent;
+	var hp2 = document.getElementById("player2-hp").textContent;
+	var at1 = atm1 == "at" ? player1Pokemon.stats[1].base_stat : player1Pokemon.stats[3].base_stat
+	var at2 = atm2 == "at" ? player2Pokemon.stats[1].base_stat : player2Pokemon.stats[3].base_stat
+	var de1 = atm2 == "at" ? player1Pokemon.stats[2].base_stat : player1Pokemon.stats[4].base_stat
+	var de2 = atm1 == "at" ? player2Pokemon.stats[2].base_stat : player2Pokemon.stats[4].base_stat	
+	var critical = 1;
+	var p1p2 = 1;
+	var p2p1 = 1;
+	var output = "";
+	
+	hp1 = hp1.replace("たいりょく: ","")
+	hp1 = parseInt(hp1)
+	
+	hp2 = hp2.replace("たいりょく: ","")
+	hp2 = parseInt(hp2)
+	
+	
+	console.log(hp1 + ":" + hp2)	
+	
+	p1p2 = await calcDamage(player1Pokemon.types[0].type.name,player2Pokemon.types[0].type.name)
+	if(player2Pokemon.types.length>=2){
+		p1p2 *= await calcDamage(player1Pokemon.types[0].type.name,player2Pokemon.types[1].type.name)
+	}
+	
+	p2p1 = await calcDamage(player2Pokemon.types[0].type.name,player1Pokemon.types[0].type.name)
+	if(player1Pokemon.types.length>=2){
+		p2p1 *= await calcDamage(player2Pokemon.types[0].type.name,player1Pokemon.types[1].type.name)
+	}
+
+//	while(hp1 > 0 && hp2>0){
+		critical = isCritical()
+		output = ""
+		output += player2Pokemon.name +"のこうげき！<br>"
+		if(at2>de1){
+			hp1 -= (5 + ((at2 -de1) * p2p1 * critical)) 
+		}else{
+			hp1 -= 5 * p2p1 * critical
+		}
+		if(hp1 < 0){
+			hp1 = 0;
+		}
+		if (critical == 2){
+			output  +=　"きゅうしょにあたった！<br>"
+		}
+		if (p2p1 > 1){
+			output  +=　"こうかはばつぐんだ！<br>"
+		}else if(p2p1 < 1 && p2p1 > 0){
+			output  +=　"こうかはいまひとつのようだ・・・<br>"
+		}else if(p2p1 == 0){
+			output +=　"こうかはないようだ・・・<br>"
+		}
+		output  += player1Pokemon.name + "のたいりょく のこり:" + hp1 + '<br>'
+		
+		resultElement.innerHTML  += '<font color="red">' + output
+		output = ""
+		
+		critical = isCritical()
+		
+		output  +=　player1Pokemon.name +"のこうげき！<br>"
+		if(at1>de2){
+			hp2 -= 5 + ((at1-de2) * p1p2 * critical)
+		}else{
+			hp2 -= 5 * p1p2 * critical
+		}
+		if(hp2 < 0){
+			hp2 = 0;
+		}
+		if (critical == 2){
+			output +=　"きゅうしょにあたった！<br>"
+		}
+		if (p1p2 > 1){
+			output +=　"こうかはばつぐんだ！<br>"
+		}else if(p1p2 < 1 && p1p2>0){
+			output  +=　"こうかはいまひとつのようだ・・・<br>"
+		}else if(p1p2 == 0){
+			output  +=　"こうかはないようだ・・・<br>"
+		}
+		output  +=  player2Pokemon.name + "のたいりょく のこり:" + hp2 + '<br>'
+		resultElement.innerHTML  += '<font color="blue">' + output
+		
+		document.getElementById("player1-hp").textContent = "たいりょく: " + hp1;
+		updateGauge(1,hp1,player1Pokemon.stats[0].base_stat)
+		document.getElementById("player2-hp").textContent = "たいりょく: " + hp2;
+		updateGauge(2,hp2,player2Pokemon.stats[0].base_stat)
+//	}
+	
+	
+	if(hp1<=0 || hp2<=0){
+		if (hp1 > hp2) {
+	        resultElement.innerHTML  += '<font color="blue">' + player1Pokemon.name + 'のかち!';
+			
+	    } else if (hp1 < hp2) {
+	        resultElement.innerHTML  += '<font color="red">' + player2Pokemon.name + 'のかち!';
+	    } else {
+	        resultElement.innerHTML  += '引き分けー';
+	    }
+	}
+}
+
 function isCritical() {
     return Math.random() < 0.1 ? 2 : 1;
+}
+
+function updateGauge(kbn, value, maxValue) {
+    var gauge = document.getElementById('gauge' + kbn);
+    var percentage = (value / maxValue) * 100;
+    gauge.style.width = percentage + '%';
+
+    if (percentage > 20) {
+        gauge.style.backgroundColor = 'green';
+    } else {
+        gauge.style.backgroundColor = 'red';
+    }
 }

@@ -3,21 +3,79 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>別ウインドウ</title>
+    <title>きみのポケモン</title>
 </head>
 <body>
-    <input type="text" id="inputField" placeholder="値を入力してください">
-    <button onclick="window.close()">きみにきめた！</button>
-	<button onclick="location.href='/zukan'">ひょうじ</button>
+    <input type="hidden" id="inputField" placeholder="値を入力してください">
 	<table id="zukanTable">
 		<tr>
 		    <th>ID</th>
 		    <th>Name</th>
+			<th>　</th>
 		</tr>
 		<tr th:each="item : ${items}">
-		    <td th:text="${item.id}"></td>
+		    <td id = "pokeid" th:text="${item.id}"></td>
 		    <td th:text="${item.name}"></td>
+			<td><button onclick=" val = getLeftColumnValue(this); setValue(val); window.close()">きみにきめた！</button></td>
 		</tr>
 </body>
-
+<script>
+	function setValue(num){
+		document.getElementById("inputField").value = num;
+		//alert(num)
+	}
+	
+	function getLeftColumnValue(button) {
+	            // ボタンの親要素（td）の親要素（tr）を取得
+	            var row = button.parentNode.parentNode;
+	            // 一番左のセルの値を取得
+	            return row.cells[0].innerText;
+	            
+	        }
+</script>
+<style>
+    body {
+        background-color: #f0f8ff;
+        font-family: 'Comic Sans MS', cursive, sans-serif;
+        text-align: center;
+        padding: 20px;
+    }
+    h1 {
+        color: #ff4500;
+        font-size: 48px;
+        text-shadow: 2px 2px #ffa07a;
+    }
+    table {
+        margin: 0 auto;
+        border-collapse: collapse;
+        width: 80%;
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    th, td {
+        border: 1px solid #ddd;
+        padding: 10px;
+        text-align: center;
+    }
+    th {
+        background-color: #ff6347;
+        color: white;
+    }
+    td {
+        background-color: #f9f9f9;
+    }
+    button {
+        padding: 10px 20px;
+        background-color: #ff6347;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: background-color 0.3s, transform 0.3s;
+    }
+    button:hover {
+        background-color: #ff4500;
+        transform: scale(1.1);
+    }
+</style>
 </html>

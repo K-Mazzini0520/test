@@ -18,8 +18,8 @@ public class ZukanController {
     @GetMapping
     public String listZukans(Model model) {
     	
-        //model.addAttribute("zukan", zukanRepository.findAllByOrderByIdAsc());
-        model.addAttribute("items", zukanRepository.findAll());
+        model.addAttribute("items", zukanRepository.findAllByOrderByIdAsc());
+        //model.addAttribute("items", zukanRepository.findAll());
         
         //System.out.println(model);
         //return "zukan/zukan.html";

@@ -90,3 +90,17 @@ img#player2-type2img {
     font-weight: bold;
     
 }
+
+.gauge-container {
+    width: 100%;
+    background-color: #ddd;
+    border: 1px solid #000;
+    height: 12px;
+    position: relative;
+}
+.gauge {
+    height: 100%;
+    width: 100%;
+    background-color: green;
+    transition: width 0.5s, background-color 0.5s;
+}
